@@ -1,0 +1,15 @@
+{% if global.config.disqus_enabled %}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      Discuss
+      <i class="fa fa-fw fa-angle-right"></i>
+    </h3>
+  </div>
+  <div class="panel-body markdown-body">
+    {% if global.config.disqus_enabled %}
+    {% include 'discuss/disqus.html' %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}

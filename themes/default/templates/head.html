@@ -1,0 +1,15 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta http-equiv="cleartype" content="on">
+<link rel="alternate" type="application/atom+xml" title="{{ global.site.title }}" href="{{ url_for('feed') }}"/>
+
+<!-- Link common CSS and JavaScript files -->
+<script src="{{ url_for('theme.static', filename='highlight.min.js') }}"></script>
+<link href="{{ url_for('theme.static', filename='highlight-default.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('theme.static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('theme.static', filename='github-markdown-style.css') }}" rel="stylesheet">
+<link href="{{ url_for('theme.static', filename='bootstrap-cosmo.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('theme.static', filename='style.css') }}" rel="stylesheet">
+
+<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">

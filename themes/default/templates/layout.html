@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html {%- if global.site.language %} lang="{{ global.site.language }}" {%- endif %}>
+
+<head>
+  {% block head %}
+  {% include ['custom/head.html', 'head.html'] ignore missing %}
+  {% endblock %}
+</head>
+
+<body>
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 site-header">
+              {% include ['custom/header.html', 'header.html'] ignore missing %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 nav-container">
+              <ul class="nav nav-tabs">
+                {% include ['custom/nav.html', 'nav.html'] ignore missing %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          {% block body %}{% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include ['custom/footer.html', 'footer.html'] ignore missing %}
+
+  {% block foot %}
+  {% include ['custom/foot.html', 'foot.html'] ignore missing %}
+  {% endblock %}
+</body>
+
+</html>

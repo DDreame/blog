@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{{ super() }}
+<title>{{ global.site.title }}</title>
+{% endblock %}
+
+{% block body %}
+
+{% if not entries %}
+<p>There is nothing here.</p>
+{% else %}
+
+{% for entry in entries %}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      {% for category in entry.categories %}
+      {% if loop.index > 1 %}
+      <span> &amp; </span>
+      {% endif %}
+      <a href="{{ url_for('category', name=category) }}">{{ category }}</a>
+      {% endfor %}
+      <i class="fa fa-fw fa-angle-right"></i>
+    </h3>
+  </div>
+  <div class="panel-body markdown-body">
+    <article>
+      <h1><a href="{{ entry.url }}">{{ entry.title }}</a></h1>
+      {{ entry.content | safe }}
+    </article>
+  </div>
+  <div class="panel-footer">
+    <span><i class="fa fa-fw fa-calendar"></i>{{ entry.created.strftime('%Y.%m.%d') }}</span>
+    {% if entry.updated and entry.updated != entry.created %}
+    <span><i class="fa fa-fw fa-refresh"></i>{{ entry.updated.strftime('%Y.%m.%d') }}</span>
+    {% endif %}
+    <span><i class="fa fa-fw fa-tags"></i>
+      {%- for tag in entry.tags -%}
+      {% if loop.index > 1 %}<span>, </span>{% endif %}<a href="{{ url_for('tag', name=tag) }}">{{ tag }}</a>
+      {%- endfor -%}
+    </span>
+  </div>
+</div>
+{% endfor %}
+
+{% if pager.prev_url or pager.next_url %}
+<ul class="pager">
+  {% if pager.prev_url %}
+  <li class="previous">
+    <a href="{{ pager.prev_url }}">← Newer</a>
+  </li>
+  {% endif %}
+  {% if pager.next_url %}
+  <li class="next">
+    <a href="{{ pager.next_url }}">Older →</a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
