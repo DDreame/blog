@@ -1,6 +1,8 @@
-----
+---
 title: Sky Hackthon比赛指北-ASR篇
-----
+categories: Sky Hackthon
+tags: [Sky Hackthon, ASR]
+---
 # 写在前面
 本系列具体介绍可以参见[基础篇](https://blog.csdn.net/qq_36630208/article/details/128104922)。这篇是系列第二篇，篇幅相较于基础篇会比较短，因为 Nemo 真的是一个很好用的库。
 
