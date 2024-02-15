@@ -7,8 +7,8 @@ timezone = "Asia/Shanghai"
 [config]
 posts_per_index_page = 999999
 disqus_enabled = true
-disqus_short_name = "XinChen"
-google_analytics_enabled = false
+disqus_short_name = "dreamful-life"
+google_analytics_enabled = true
 google_analytics_id = "G-E5C5GDFDF6"
 hitokoto_enabled = true
 hitokoto_categories = ["h", "d", "i", "k"]
