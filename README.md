@@ -5,7 +5,7 @@
 <hr/>
 
 <h3 align="center">
- 一个基于[OpenBlog](https://github.com/danielcgilibert/blog-template)构造的个人博客
+ 一个基于[OpenBlog]构造的个人博客
 </h3>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdanielcgilibert%2Fblog-template)
