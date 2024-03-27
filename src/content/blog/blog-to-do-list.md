@@ -1,7 +1,7 @@
 ---
 title: 博客 todo list
 description: >-
-  正在写，或者准备写的博客列表
+  正在写, 或者准备写的博客列表
 pubDate: 2024-03-22T03:03:19Z
 heroImage: ../../assets/images/normal/mac.jpg # todo
 category: 生活感受
