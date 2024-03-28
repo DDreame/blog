@@ -21,7 +21,6 @@ tags:
 - [开源项目](#开源项目)
 - [应用场景](#应用场景)
 - [Openai API](#openai-api)
-- [Gradio](#gradio)
 
 # 模型训练
 
@@ -101,18 +100,12 @@ tags:
 
 一些常见的应用场景和示例的 prompt。
 
-- 传统的自然语言处理问题
-  -
-- 数学问题、图论问题
-  -
-- 角色扮演问题
-  -
-- 编程问题
-  -
-- 创作问题
-  -
-- 数据分析问题
-  -
+- ## 传统的自然语言处理问题
+- ## 数学问题、图论问题
+- ## 角色扮演问题
+- ## 编程问题
+- ## 创作问题
+- ## 数据分析问题
 
 # Openai API
 
@@ -122,4 +115,81 @@ Tokenizer 计算: 中文一个汉字一般是一个 Token。而英文的单词�
 
 OpenAI 提供了 PlayGround, 可以进行很多测试。 `System` 是默认的 Prompt, `User` 是用户输入, 模型返回是 `Assistant`。
 
-# Gradio
+初始化客户端
+
+```python
+# 初始化
+import os
+from openai import OpenAI
+from dotenv import load_dotenv, find_dotenv
+# 将 API key 放在.env 文件内
+load_dotenv()
+# 需要替换自己的 API 地址, 例如使用 One API 项目自建, 不写就是 OpenAI 官方的
+client = OpenAI(base_url='')
+```
+
+调用基础模型
+
+```python
+completion = client.chat.completions.create(
+    model='gpt-4-1106-preview',
+    messages=[
+        {"role":"system", "content":"你是一名专业的大模型课程助教，给学生提供必要的学习支持，如提供提示、纠正错误等"},
+        {"role":"user", "content":"如何学习大模型"},
+
+    ],
+    max_tokens = 500,
+    # GPT-4 seed 保持输出结果一致
+    seed = 42,
+    temperature=0.7,
+)
+```
+
+画图模型 DALL-E3 调用
+
+```python
+# DALL-E 3
+image_style = ['Photo', 'Cartoon', 'Illustration']
+image_type = ['vivid', 'natural']
+response = client.images.generate(
+    model='dall-e-3',
+    prompt='在一个教室里面，很多学生正在学习数学',
+    size='1024x1024',
+    quality='standard',
+    type=image_type[0],
+    n=1
+)
+print(response)
+print(response.data[0].url)
+```
+
+关于 GPT-4-Vision 的调用
+
+```python
+# GPT-4-Vision
+# 可以传递若干个图片和文字
+# 用于视频解说之类的
+response = client.chat.completions.create(
+    model='gpt-4-vision-preview',
+    messages = [
+        {
+            "role":"user",
+            "content":[
+                {
+                    "type": "text",
+                    "text": "What is in this image?"
+                },
+                {
+                    "type":"image_url",
+                    "image_url": "https://dalleprodsec.blob.core.windows.net/private/images/cf5f3ed7-81df-442a-9edd-e24b0043ba0f/generated_00.png?se=2024-03-29T08%3A14%3A06Z&sig=94WGqAgkbI9pgjvL5v0OccQvXIp6eF4iTUEiWVOQEeQ%3D&ske=2024-04-04T01%3A54%3A42Z&skoid=e52d5ed7-0657-4f62-bc12-7e5dbb260a96&sks=b&skt=2024-03-28T01%3A54%3A42Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02"
+                }
+            ],
+        },
+
+    ],
+    max_tokens=200,
+)
+print(response)
+print("--------------------------------")
+print(response.choices[0].message.content)
+```
