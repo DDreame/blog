@@ -2,7 +2,7 @@
 title: 大模型应用开发-Part1
 description: >-
   大模型应用案例分析及开发学习
-pubDate: 2024-03-27T09:56:43Z
+pubDate: 2024-03-28T12:20:32Z
 heroImage: ../../assets/images/normal/mac.jpg
 category: 软件开发
 tags:
@@ -19,6 +19,9 @@ tags:
 - [模型训练](#模型训练)
 - [应用Case分析](#应用case分析)
 - [开源项目](#开源项目)
+- [应用场景](#应用场景)
+- [Openai API](#openai-api)
+- [Gradio](#gradio)
 
 # 模型训练
 
@@ -93,3 +96,30 @@ tags:
 # 开源项目
 
 [Awesome Chinese LLM](https://github.com/HqWu-HITCS/Awesome-Chinese-LLM)
+
+# 应用场景
+
+一些常见的应用场景和示例的 prompt。
+
+- 传统的自然语言处理问题
+  -
+- 数学问题、图论问题
+  -
+- 角色扮演问题
+  -
+- 编程问题
+  -
+- 创作问题
+  -
+- 数据分析问题
+  -
+
+# Openai API
+
+API 主要位于 OpenAI 的 [doc](https://platform.openai.org/)
+
+Tokenizer 计算: 中文一个汉字一般是一个 Token。而英文的单词数量与 token 数量不一致，一般小于这个数字。
+
+OpenAI 提供了 PlayGround, 可以进行很多测试。 `System` 是默认的 Prompt, `User` 是用户输入, 模型返回是 `Assistant`。
+
+# Gradio
