@@ -13,7 +13,10 @@ tags:
 
 # 目录
 
-学习参考网站: [Prompt Engineering Guide](http://www.promptingguide.ai)
+学习参考网站:
+
+1. [Prompt Engineering Guide](http://www.promptingguide.ai)
+2. [OpenAI Prompt](http://platforum.openai.org)
 
 - [目录](#目录)
 - [为什么](#为什么)
@@ -24,6 +27,7 @@ tags:
   - [3.1 短视频脚本制作](#31-短视频脚本制作)
   - [3.2 小红书爆款文章](#32-小红书爆款文章)
   - [3.3 UserCases-模拟面试](#33-usercases-模拟面试)
+- [4.总结](#4总结)
 
 # 为什么
 
@@ -239,3 +243,31 @@ Few-Shot 进阶: 思维链, Self-consitency
 4.当面试教练提供反馈时，总是使用清晰的结构
 5.当面试教练提供反馈时，它总是会提供0-10的分数，并给出分数的基本原理
 ```
+
+# 4.总结
+
+For prompt engineering, one should
+对于快速工程，应该
+
+- Write clear instructions 写清楚的说明
+- Split complex tasks into simpler subtasks 将复杂的任务拆分为更简单的子任务
+- Give GPT-3.5/GPT-4 time to “think” 给 GPT-3.5/GPT-4 时间“思考”
+- Test changes systematically 系统地测试更改
+
+After going through the above steps, they can be extended to
+完成上述步骤后，可以扩展到
+
+- Providing Reference Text 提供参考文本
+- Using external Tools 使用外部工具
+
+Prompt engineering is good for
+提示工程适用于
+
+- Testing and learning early 尽早测试和学习
+- When paired with evaluation it provides the baseline 当与评估配对时，它提供了基线
+
+Not good for 不适合
+
+- Introducing new information 介绍新信息
+- Reliability replicating a complex style or method (for ex, a new programming language) 复制复杂样式或方法（例如，一种新的编程语言）的可靠性
+- Minimizing token usage 最小化令牌使用
