@@ -1,0 +1,31 @@
+<div class="mx-auto">
+    <div id="search" class="mx-auto md:w-4/6 p-4 -mt-8"></div>
+
+</div>
+<script>
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "/" || event.key === ".") {
+      console.log("you pressed the slash");
+      event.preventDefault();
+      // document.querySelector("div#search input").focus();
+    }
+  });
+</script>
+<style is:global>
+  .dark {
+    --pagefind-ui-primary: #eeeeee;
+    --pagefind-ui-text: #b5b3b3;
+    --pagefind-ui-background: #152028;
+    --pagefind-ui-border: #152028;
+    --pagefind-ui-tag: #152028;
+  }
+  .light {
+    --pagefind-ui-primary: #152028;
+    --pagefind-ui-text: #152028;
+    --pagefind-ui-background: #eeeeee;
+    --pagefind-ui-border: #eeeeee;
+    --pagefind-ui-tag: #eeeeee;
+  }
+
+</style>

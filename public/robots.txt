@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://blog.dreamful.life/sitemap-index.xml

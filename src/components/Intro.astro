@@ -1,0 +1,37 @@
+---
+import { readAll } from "../lib/markdoc/read";
+import { blog } from "../lib/markdoc/frontmatter.schema";
+
+const posts = await readAll({
+  directory: "blog",
+  frontmatterSchema: blog,
+});
+
+const sortedPosts = posts
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
+---
+
+<section class=`mt-[4rem] mb-8 text-center rounded-xl`>
+  <div class="mb-4">
+    <h1
+      class="py-4 font-extrabold text-5xl md:text-6xl tracking-tight pt-4 pb-2 overflow-hidden"
+    >
+      <span
+        class="bg-gradient-to-br from-[#fb923c] via-[#f97316] to-[#ea580c] dark:from-primary-main dark:via-primary-main dark:to-primary-main bg-clip-text text-transparent "
+      >
+        <span>DDreame.Blog<\>
+      </span>
+    </h1>
+  </div>
+  <div>
+    <p class="mb-5">
+      这里是梦某人的个人博客, 随个人心情保持更新.
+    </p>
+   
+  </div>
+</section>
