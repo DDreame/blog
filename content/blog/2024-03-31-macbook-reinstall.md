@@ -3,14 +3,13 @@ external: false
 title: 3月31系统重装备忘录
 description: >-
   由于电脑存在太多奇怪的软件和环境, 导致我的某些软件无法运行,因此选择了直接重装系统。在这记录一下安装的所有东西用以防止后续忘记和混乱。
-date: 2024-03-21
+date: 2024-03-31
 ogImagePath: /images/normal/mac.jpg
 category: 工具知识
 tags:
   - MacOS
   - 系统环境
   - 备忘录
-draft: true
 ---
 
 
