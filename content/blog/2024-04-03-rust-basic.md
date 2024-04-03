@@ -1,6 +1,6 @@
 ---
 external: false
-title: Rust基础知识-Part1
+title: Rust基础知识-概览
 description: >-
   总结学习到的 Rsut 的基础知识，包括基本数据类型、控制流、函数与模块等
 date: 2024-04-02
@@ -10,7 +10,6 @@ tags:
   - Rust
   - basic
   - summary
-draft: true
 ---
 
 # 目录
