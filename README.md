@@ -8,6 +8,8 @@ This is DDreame Blog Github.
  - [ ] add i18n
  - [ ] fix home page
  - [ ] add math support
+ - [ ] related blog
+ - [ ] author
 
 
 
