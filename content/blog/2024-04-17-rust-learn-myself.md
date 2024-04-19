@@ -3,7 +3,7 @@ external: false
 title: Rust基础知识-类型系统
 description: >-
   总结学习到的 Rust 知识, 类型系统
-date: 2024-04-03
+date: 2024-04-17
 ogImagePath: /images/normal/mac.jpg
 category: 软件开发
 tags:
