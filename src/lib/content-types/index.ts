@@ -37,7 +37,10 @@ export type Post = z.infer<typeof postSchema>
 
 // Project-specific schema
 export const projectSchema = baseSchema.extend({
-  url: z.string().url().optional(),
+  summary: z.string().optional(),
+  demo_url: z.string().url().optional(),
+  code_url: z.string().url().optional(),
+  cover_image: z.string().optional(),
   role: z.string().optional(),
   evidence: z.array(z.string()).optional(),
   verification: z.array(z.string()).optional(),
