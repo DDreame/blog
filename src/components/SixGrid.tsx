@@ -6,6 +6,26 @@ type ExtendedContentFile = ContentFile & {
   data: ContentFile['data'] & { url?: string; role?: string }
 }
 
+type GridItem =
+  | {
+      type: 'post'
+      slug: string
+      title: string
+      date: string
+      description?: string
+      url: undefined
+      isExternal: undefined
+    }
+  | {
+      type: 'project'
+      slug: string
+      title: string
+      date: string
+      description?: string
+      url: string
+      isExternal: boolean
+    }
+
 export default function SixGrid() {
   const posts = getPublicContent('posts') as ExtendedContentFile[]
   const projects = getPublicContent('projects') as ExtendedContentFile[]
@@ -13,21 +33,22 @@ export default function SixGrid() {
   const featuredPosts = posts.slice(0, 3)
   const featuredProjects = projects.slice(0, 3)
 
-  const gridItems = [
-    ...featuredPosts.map((p) => ({
-      type: 'post' as const,
+  const gridItems: GridItem[] = [
+    ...featuredPosts.map((p): GridItem => ({
+      type: 'post',
       slug: p.slug,
       title: p.data.title,
       date: p.data.date,
-      url: `/posts/${p.slug}`,
       description: p.data.description,
+      url: undefined,
+      isExternal: undefined,
     })),
-    ...featuredProjects.map((p) => ({
-      type: 'project' as const,
+    ...featuredProjects.map((p): GridItem => ({
+      type: 'project',
       slug: p.slug,
       title: p.data.title,
       date: p.data.date,
-      url: p.data.url ?? `/projects/${p.slug}`,
+      url: p.data.url ?? `/proof`,
       description: p.data.description,
       isExternal: !!p.data.url,
     })),
@@ -37,21 +58,6 @@ export default function SixGrid() {
     <section className="mx-auto px-4 py-8 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-semibold text-xl md:text-2xl">精选内容</h2>
-        <div className="flex gap-3 text-sm">
-          <Link
-            href="/posts"
-            className="text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 font-medium transition-colors"
-          >
-            博客
-          </Link>
-          <span className="text-slate-400">/</span>
-          <Link
-            href="/projects"
-            className="text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 font-medium transition-colors"
-          >
-            项目
-          </Link>
-        </div>
       </div>
 
       {gridItems.length === 0 ? (
@@ -59,13 +65,18 @@ export default function SixGrid() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {gridItems.map((item) => {
-            const card = (
-              <CardContent
-                key={`${item.type}-${item.slug}`}
-                item={item}
-              />
-            )
-            if (item.type === 'project' && item.isExternal) {
+            const card = <CardContent key={`${item.type}-${item.slug}`} item={item} />
+            if (!item.url) {
+              return (
+                <article
+                  key={`${item.type}-${item.slug}`}
+                  className="group relative border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 bg-white dark:bg-slate-800/50"
+                >
+                  <div className="block p-5 h-full">{card}</div>
+                </article>
+              )
+            }
+            if (item.isExternal) {
               return (
                 <article
                   key={`${item.type}-${item.slug}`}
@@ -99,16 +110,14 @@ export default function SixGrid() {
   )
 }
 
-function CardContent({
-  item,
-}: {
-  item: {
-    type: 'post' | 'project'
-    title: string
-    date: string
-    description?: string
-  }
-}) {
+type CardContentItem = {
+  type: 'post' | 'project'
+  title: string
+  date: string
+  description?: string
+}
+
+function CardContent({ item }: { item: CardContentItem }) {
   const formattedDate = new Date(item.date).toLocaleDateString('zh-cn', {
     year: 'numeric',
     month: 'short',
