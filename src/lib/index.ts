@@ -1,1 +1,1 @@
-// Lib placeholder
+export * from './content-types'
