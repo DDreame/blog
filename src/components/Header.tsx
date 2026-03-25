@@ -2,9 +2,12 @@ import Link from 'next/link'
 
 const navLinks = [
   { href: '/', label: '首页' },
-  { href: '/posts', label: '博客' },
-  { href: '/projects', label: '项目' },
   { href: '/thinking', label: '思维' },
+  { href: '/proof', label: '证明' },
+  { href: '/graph', label: '图谱' },
+  { href: '/demos', label: '演示' },
+  { href: '/chat', label: '对话' },
+  { href: '/api', label: 'API' },
 ]
 
 export default function Header() {
@@ -12,10 +15,13 @@ export default function Header() {
     <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
       <div className="max-w-4xl mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
-          <Link href="/" className="font-bold text-lg text-slate-800 dark:text-slate-100">
+          <Link
+            href="/"
+            className="font-bold text-lg text-slate-800 dark:text-slate-100"
+          >
             莫向外求
           </Link>
-          <ul className="flex items-center gap-6">
+          <ul className="flex items-center gap-4 flex-wrap">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
