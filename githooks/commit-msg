@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Commit message validation hook
+# Format: {type}({scope}): {description}
+# Types: feat, fix, docs, style, refactor, test, chore
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Skip if empty (shouldn't happen but be safe)
+if [ -z "$COMMIT_MSG" ]; then
+    echo "Commit message is empty"
+    exit 1
+fi
+
+# Remove any comment lines (lines starting with #)
+COMMIT_MSG=$(echo "$COMMIT_MSG" | grep -v '^#' | head -1)
+
+# Check format: type(scope): description
+# Type must be: feat, fix, docs, style, refactor, test, chore
+PATTERN="^(feat|fix|docs|style|refactor|test|chore)(\([a-z0-9-]+\))?: .+"
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+    echo "Invalid commit message format: '$COMMIT_MSG'"
+    echo ""
+    echo "Expected format: {type}({scope}): {description}"
+    echo "Type must be one of: feat, fix, docs, style, refactor, test, chore"
+    echo "Example: feat(t2): add user authentication"
+    exit 1
+fi
+
+exit 0
