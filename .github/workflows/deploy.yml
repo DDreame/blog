@@ -25,6 +25,8 @@ jobs:
         run: npm run build
         env:
           LIVE_URL: https://blog.dreamful.life
+          EDIT_PASSWORD: ${{ secrets.EDIT_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
