@@ -27,7 +27,7 @@ if (typeof slug !== "string") {
   throw Error(`slug should be string. Received: ${slug}`);
 }
 
-const { content, frontmatter } = await readOne({
+const { content, renderedContent, frontmatter } = await readOne({
   directory: "blog",
   slug,
   frontmatterSchema: blog,
@@ -48,5 +48,5 @@ const ogImageAbsoluteUrl =
     ogImageAbsoluteUrl={ogImageAbsoluteUrl}
     slot="meta"
   />
-  <Renderer content={content} slot="content" />
+  <Renderer renderedContent={renderedContent} slot="content" />
 </ContentLayout>

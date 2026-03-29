@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+
+export default {
   content: ["./src/**/*.astro"],
   darkMode: "class",
   theme: {
@@ -68,7 +70,7 @@ module.exports = {
             },
             "blockquote::before": {
               "font-family": "Arial",
-              content: "'“'",
+              content: "'\"'",
               "font-size": "4em",
               color: "rgb(var(--color-text-link))",
               position: "absolute",
@@ -110,5 +112,5 @@ module.exports = {
       }),
     },
   },
-  plugins: [require("@tailwindcss/typography")],
-};
+  plugins: [typography],
+} satisfies Config;

@@ -14,7 +14,7 @@ async function parseAndTransform({ content }: { content: string }) {
 
   const errors = Markdoc.validate(ast, config);
   if (errors.length) {
-    console.log(ast)
+    console.log(ast);
     console.error(errors);
     throw new Error("Markdoc validation error");
   }
@@ -37,7 +37,7 @@ function validateFrontmatter<T extends z.ZodTypeAny>({
     return validatedFrontmatter as z.infer<T>;
   } catch (e) {
     const errMessage = `
-      There was an error validating your frontmatter. 
+      There was an error validating your frontmatter.
       Please make sure your frontmatter for file: ${filepath} matches its schema.
     `;
     throw Error(errMessage + (e as Error).message);
@@ -60,6 +60,9 @@ export async function read<T extends z.ZodTypeAny>({
     filepath,
   });
 
+  // Render Markdoc to HTML
+  const renderedContent = Markdoc.renderers.html(transformedContent);
+
   const filename = filepath.split("/").pop();
   if (typeof filename !== "string") {
     throw new Error("Check what went wrong");
@@ -69,6 +72,7 @@ export async function read<T extends z.ZodTypeAny>({
   return {
     slug: fileNameWithoutExtension,
     content: transformedContent,
+    renderedContent,
     frontmatter: validatedFrontmatter,
   };
 }

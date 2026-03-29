@@ -3,6 +3,7 @@
   "display": "theme/newspaper",
   "compilerOptions": {
     "types": ["astro/client"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "verbatimModuleSyntax": true
   }
 }

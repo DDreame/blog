@@ -1,0 +1,375 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+const editPasswordCookie = Astro.cookies.get("edit_password")?.value;
+const expectedPassword = import.meta.env.EDIT_PASSWORD || "admin";
+const isAuthenticated = editPasswordCookie === expectedPassword;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900">
+    <Header />
+
+    <main class="flex-1 px-4 py-8 max-w-5xl mx-auto w-full">
+
+      {!isAuthenticated ? (
+        /* Login Section */
+        <div class="min-h-[60vh] flex items-center justify-center">
+          <div class="w-full max-w-sm">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
+              <div class="text-center mb-8">
+                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h1 class="text-xl font-semibold text-slate-900 dark:text-white">Admin Login</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Enter password to access the admin panel</p>
+              </div>
+
+              <form id="login-form" class="space-y-4">
+                <div>
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors duration-150"
+                >
+                  Sign In
+                </button>
+                <p id="login-error" class="text-red-500 text-sm text-center hidden"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Admin Dashboard */
+        <div>
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Blog Admin</h1>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your blog posts</p>
+            </div>
+            <button
+              id="logout-btn"
+              class="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            >
+              Sign Out
+            </button>
+          </div>
+
+          <!-- Actions Bar -->
+          <div class="flex items-center gap-4 mb-6">
+            <button
+              id="new-post-btn"
+              class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl transition-colors duration-150"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              New Post
+            </button>
+          </div>
+
+          <!-- Post List -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div id="post-list" class="divide-y divide-slate-200 dark:divide-slate-700">
+              <div class="px-6 py-4 text-slate-500 text-sm">Loading posts...</div>
+            </div>
+          </div>
+
+          <!-- Editor Modal -->
+          <div id="editor-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+            <div class="min-h-screen px-4 py-8 flex items-start justify-center">
+              <div class="w-full max-w-4xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                <!-- Editor Header -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+                  <h2 class="text-lg font-semibold text-slate-900 dark:text-white" id="editor-title">New Post</h2>
+                  <button id="close-editor" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Editor Content -->
+                <form id="post-form" class="p-6 space-y-6">
+                  <input type="hidden" id="post-slug" />
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title</label>
+                      <input
+                        type="text"
+                        id="post-title"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="Post title"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Date</label>
+                      <input
+                        type="date"
+                        id="post-date"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Description</label>
+                      <input
+                        type="text"
+                        id="post-description"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="Brief description"
+                      />
+                    </div>
+
+                    <div class="flex items-center gap-6">
+                      <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="post-draft" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                        <span class="text-sm text-slate-700 dark:text-slate-300">Draft</span>
+                      </label>
+                      <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="post-featured" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                        <span class="text-sm text-slate-700 dark:text-slate-300">Featured</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Content (Markdoc)</label>
+                    <textarea
+                      id="post-content"
+                      rows="16"
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                      placeholder="Write your content in Markdoc format..."
+                    ></textarea>
+                  </div>
+
+                  <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <p id="save-status" class="text-sm"></p>
+                    <div class="flex gap-3">
+                      <button
+                        type="button"
+                        id="cancel-btn"
+                        class="px-5 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        class="px-5 py-2.5 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors"
+                      >
+                        Save Post
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+
+    <Footer />
+
+    <script define:vars={{ expectedPassword }}>
+      const isAuth = document.querySelector('.min-h-\\[60vh\\]') === null;
+
+      if (!document.querySelector('.min-h-\\[60vh\\]')) {
+        initAdmin();
+      } else {
+        initLogin();
+      }
+
+      function initLogin() {
+        const form = document.getElementById("login-form");
+        const errorEl = document.getElementById("login-error");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const password = document.getElementById("password").value;
+
+          try {
+            const res = await fetch("/api/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ password }),
+            });
+
+            if (res.ok) {
+              window.location.reload();
+            } else {
+              const data = await res.json();
+              errorEl.textContent = data.error || "Invalid password";
+              errorEl.classList.remove("hidden");
+            }
+          } catch (err) {
+            errorEl.textContent = "Network error. Please try again.";
+            errorEl.classList.remove("hidden");
+          }
+        });
+      }
+
+      function initAdmin() {
+        const modal = document.getElementById("editor-modal");
+        const listEl = document.getElementById("post-list");
+        const logoutBtn = document.getElementById("logout-btn");
+        const newPostBtn = document.getElementById("new-post-btn");
+        const closeBtn = document.getElementById("close-editor");
+        const cancelBtn = document.getElementById("cancel-btn");
+        const form = document.getElementById("post-form");
+
+        let currentPosts = [];
+
+        // Load posts on page load
+        loadPosts();
+
+        // Event listeners
+        logoutBtn.addEventListener("click", async () => {
+          document.cookie = "edit_password=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT";
+          window.location.reload();
+        });
+
+        newPostBtn.addEventListener("click", () => openEditor());
+        closeBtn.addEventListener("click", () => closeEditor());
+        cancelBtn.addEventListener("click", () => closeEditor());
+
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) closeEditor();
+        });
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          await savePost();
+        });
+
+        async function loadPosts() {
+          try {
+            const res = await fetch("/api/posts");
+            currentPosts = await res.json();
+
+            if (currentPosts.length === 0) {
+              listEl.innerHTML = '<div class="px-6 py-8 text-center text-slate-500 text-sm">No posts yet. Create your first post!</div>';
+              return;
+            }
+
+            listEl.innerHTML = currentPosts.map(post => `
+              <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer post-item transition-colors" data-slug="${post.slug}">
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-sm font-medium text-slate-900 dark:text-white truncate">${post.title}</h3>
+                  <div class="flex items-center gap-3 mt-1">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">${post.date}</span>
+                    ${post.draft ? '<span class="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-full">Draft</span>' : ''}
+                    ${post.featured ? '<span class="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">Featured</span>' : ''}
+                  </div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            `).join('');
+
+            // Add click handlers
+            listEl.querySelectorAll('.post-item').forEach(el => {
+              el.addEventListener('click', () => {
+                const slug = el.dataset.slug;
+                const post = currentPosts.find(p => p.slug === slug);
+                if (post) openEditor(post);
+              });
+            });
+          } catch (err) {
+            listEl.innerHTML = '<div class="px-6 py-4 text-red-500 text-sm">Failed to load posts</div>';
+          }
+        }
+
+        function openEditor(post = null) {
+          document.getElementById("editor-title").textContent = post ? "Edit Post" : "New Post";
+          document.getElementById("post-slug").value = post?.slug || "";
+          document.getElementById("post-title").value = post?.title || "";
+          document.getElementById("post-date").value = post?.date || new Date().toISOString().split('T')[0];
+          document.getElementById("post-description").value = post?.description || "";
+          document.getElementById("post-draft").checked = post?.draft || false;
+          document.getElementById("post-featured").checked = post?.featured || false;
+          document.getElementById("post-content").value = post?.content || "";
+          document.getElementById("save-status").textContent = "";
+          modal.classList.remove("hidden");
+          document.getElementById("post-title").focus();
+        }
+
+        function closeEditor() {
+          modal.classList.add("hidden");
+        }
+
+        async function savePost() {
+          const slug = document.getElementById("post-slug").value;
+          const statusEl = document.getElementById("save-status");
+
+          const frontmatter = {
+            title: document.getElementById("post-title").value,
+            date: document.getElementById("post-date").value,
+            draft: document.getElementById("post-draft").checked,
+            featured: document.getElementById("post-featured").checked,
+            description: document.getElementById("post-description").value,
+          };
+
+          const content = document.getElementById("post-content").value;
+
+          statusEl.textContent = "Saving...";
+          statusEl.className = "text-sm text-slate-500";
+
+          try {
+            const endpoint = slug ? `/api/edit/${slug}` : `/api/edit/${frontmatter.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+            const res = await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ slug: slug || frontmatter.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''), content, frontmatter }),
+            });
+
+            if (res.ok) {
+              statusEl.textContent = "Saved successfully!";
+              statusEl.className = "text-sm text-green-600 dark:text-green-400";
+              setTimeout(() => {
+                closeEditor();
+                loadPosts();
+              }, 1000);
+            } else {
+              const data = await res.json();
+              statusEl.textContent = data.error || "Save failed";
+              statusEl.className = "text-sm text-red-500";
+            }
+          } catch (err) {
+            statusEl.textContent = "Network error. Please try again.";
+            statusEl.className = "text-sm text-red-500";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
