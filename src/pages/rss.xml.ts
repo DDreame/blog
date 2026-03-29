@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import rss from "@astrojs/rss";
 import { blog } from "../lib/markdoc/frontmatter.schema";
 import { readAll } from "../lib/markdoc/read";
